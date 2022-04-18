@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="card">
+    <input type="text" class="form-control search" placeholder="Search by name" [(ngModel)]="nameFilter"(change)="onSearch('name')">
+    <input type="text" class="form-control search" placeholder="Search by tag" [(ngModel)]="tagFilter"(change)="onSearch('tag')">
+    <div *ngFor="let item of students; let i1=index">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-3">
+            <img src="{{item.pic}}" class="img-responsive user">
+          </div>
+          <div class="col-auto" style="flex: 1;">
+            <div class="row">
+              <h1>{{item.firstName}}</h1>
+              <a class="exp-button" data-toggle="collapse" href="#scoreCollapse{{i1}}" role="button"
+                aria-expanded="false">
+                <i class="bi bi-plus fa-chevron-close icon"></i>
+                <i class="bi bi-dash fa-chevron-open icon"></i>
+              </a>
+            </div>
+            <p>Email: {{item.email}}</p>
+            <p>Skill: {{item.skill}}</p>
+            <p>Company: {{item.company}}</p>
+            <div class="row" style="margin-left: 1px;">
+              <button class="col-auto btn btn-secondary m-1" *ngFor="let tag of item.tags">{{tag}}</button>
+            </div>
+            <input type="text" class="form-control tag-input" placeholder="Add a tag" (change)="addTag(i1, $event)" >
+            <p>Average: {{countAverage(item.grades)}}%</p>
+            <div class="collapse" id="scoreCollapse{{i1}}">
+              <p *ngFor="let score of item.grades; let i2 = index">Text {{i2}} &nbsp;&nbsp;&nbsp;{{score}}%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+
+.card {
+    max-width: 70%;
+    margin: auto;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    max-height: 600px;
+    overflow: auto;
+}
+
+.card-body {
+    border-top: 1px solid lightgray;
+}
+
+.search {
+    border: 0px;
+    min-height: 40px;
+    border-bottom: 1px solid lightgray;
+
+}
+
+.user {
+    margin: 0 auto;
+    width: 80%;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+}
+
+.exp-button {
+    width: 40px;
+    position: absolute;
+    right: 0;
+    margin-top: 2%;
+    margin-right: 2%;
+}
+
+.tag-input {
+    width: 200px;
+    border: 0px;
+    border-bottom: 1px solid lightgray;
+}
+
+p {
+    margin: 0;
+    color: lightgrey;
+}
+
+.icon {
+    font-size: 40px;
+    color: grey;
+    font-weight: bold;
+}
+
+a[aria-expanded=true] .fa-chevron-close {
+    display: none;
+}
+
+a[aria-expanded=false] .fa-chevron-open {
+    display: none;
+}

@@ -6,7 +6,7 @@ class PostController {
   static async getPosts(req, res) {
     const sorts = ['id', 'reads', 'likes', 'popularity'];
     const directions = ['asc', 'desc'];
-    let query = req.query;
+    const { tags, direction = 'asc', sortBy = 'id' } = req.query
 
     // Check query params
     if (!query.tags) {
@@ -17,7 +17,7 @@ class PostController {
       return
     }
 
-    if (query.sortBy && !sorts.includes(query.sortBy)) {
+    if (sortBy && !sorts.includes(sortBy)) {
       // return error if sortBy is not valid
       res.status(400).json({
         "error": "sortBy parameter is invalid"
@@ -25,26 +25,23 @@ class PostController {
       return
     }
 
-    if (query.direction && !directions.includes(query.direction)) {
+    if (direction && !directions.includes(direction)) {
       // return error if direction is not valid
       res.status(400).json({
         "error": "direction parameter is invalid"
       });
       return
     }
-    let sort = query.sortBy || 'id';
-    let direction = query.direction || 'asc';
-
     // handle data
-    let tags = query.tags.split(',');
+    let tagArr = tags.split(',');
     let posts = [];
-    let cachePosts = cache.get(query.tags);
+    let cachePosts = cache.get(tags);
     if (cachePosts) {
       posts = cachePosts;
-    }else {
+    } else {
       let apis = [];
-      for (let i = 0; i < tags.length; i++) {
-        apis.push(fetchPosts(tags[i]));
+      for (let i = 0; i < tagArr.length; i++) {
+        apis.push(fetchPosts(tagArr[i]));
       }
       let results = await Promise.all(apis);
       results = results.map(result => result.data);
@@ -52,16 +49,15 @@ class PostController {
         posts = posts.concat(result.posts);
       });
       // cache data
-      cache.put(query.tags, posts, 1000 * 60 * 60);
+      const TIME_OUT = 1000 * 60 * 60;
+      cache.put(query.tags, posts, TIME_OUT);
     }
     // remove duplicates
     let ids = posts.map(post => post.authorId);
-    posts = posts.filter((post, index) => ids.indexOf(post.authorId) === index);
+    posts = posts.filter((post, index) => ids.indexOf(post.id) === index);
     // sort posts
     posts.sort((a, b) => (a[sort] - b[sort]) * (direction === 'asc' ? 1 : -1));
-    res.json({
-      "posts":posts
-    })
+    res.json({ posts })
   }
 }
 
